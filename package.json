@@ -4,13 +4,19 @@
   "description": "Mimi's Creations rest api",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon ./index.js",
     "test": "jest"
   },
   "author": "Kaleb Dean",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "env": "0.0.2",
     "express": "^4.17.1",
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "mongodb": "^3.6.10",
+    "mongoose": "^5.13.2",
+    "nodemon": "^2.0.9"
   }
 }
