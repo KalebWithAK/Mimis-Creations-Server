@@ -1,10 +1,21 @@
 const mongoose = require('mongoose');
 
-const ProductSchema = mongoose.Schema({
+const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     desc: String,
-    price: { type: Number, required: true },
-    inStock: { type: Number, required: true }
+    inStock: Number,
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }
 });
 
-module.exports = mongoose.model('Products', ProductSchema);
+productSchema.statics.findByIdentifier = async function (identifier) {
+    let product = await this.findById(identifier);
+
+    if (!product) {
+        product = await this.findOne({ name: identifier });
+    }
+
+    return product;
+}
+
+const Product = mongoose.model('Product', productSchema);
+module.exports = Product;

@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
 
-const Product = require('./product');
-const Transaction = require('./transaction');
+const orderSchema = new mongoose.Schema({
+    _id: Schema.Types.ObjectId,
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', quantity: { type: Number, default: 1 }}],
+    status: { type: String, enum: ['PROCESSING', 'CONFIRMED', 'SHIPPING', 'DELIVERED'], default: 'PROCESSING', required: true },
+    completed: { type: Boolean, default: false },
+    transaction: { 
+        confirmation: { type: String, required: true },
+        customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
+        paymentMethod: { type: String, required: true }, // square, venmo, paypal
+        amount: { type: Number, required: true },
+        date: { type: Date, default: Date.now() }
+    }
+}, { timestamp: true });
 
-const OrderSchema = mongoose.Schema({
-    customer_id: { type: Number, required: true },
-    transaction: { type: Transaction, required: true },
-    products: [{ type: Product, quantity: Number }],
-    total: { type: Number, required: true },
-    shippingAddress: { type: String, required: true }
-});
-
-module.exports = mongoose.model('Order', OrderSchema);
+const Order = mongoose.model('Order', orderSchema);
+module.exports = Order;

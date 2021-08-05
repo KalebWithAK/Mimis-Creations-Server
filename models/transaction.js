@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const TransactionSchema = mongoose.Schema({
-    customer_id: { type: Number, required: true },
+const transactionSchema = new mongoose.Schema({
+    confirmation: { type: String, required: true },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer'},
+    paymentMethod: { type: String, required: true }, // square, venmo, paypal
     amount: { type: Number, required: true },
-    payment_type: { type: String, required: true },
-    confirmation: { type: String, default: null /* randomly generated string */ },
-    datetime: { type: Date, default: Date.now() }
-});
+    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true }
+}, { timestamp: true }, { collection: 'transactions' });
 
-module.exports = mongoose.model('Transaction', TransactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
+module.exports = Transaction;

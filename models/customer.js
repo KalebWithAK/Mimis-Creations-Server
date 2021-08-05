@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 
-const Product = require('./product');
-const CurrentOrder = require('./currentOrder');
-const PastOrder = require('./pastOrder');
-
-const CustomerSchema = mongoose.Schema({
-    email: { type: String, required: true },
-    cart: [{ type: Product }],
-    currentOrders: [{ type: CurrentOrder }],
-    pastOrders: [{ type: PastOrder }]
+const customerSchema = mongoose.Schema({
+    name: String,
+    email: { type: String, unique: true, required: true },
+    cart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', quantity: { type: Number, default: 1}}],
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]
 });
 
-module.exports = mongoose.model('Customers', CustomerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
+module.exports = Customer;
