@@ -26,7 +26,7 @@ connection.on('open', () => {
 
 // using routers
 const category_router = require('./routers/category_routes');
-const customer_router = require('./router/customer_routes');
+const customer_router = require('./routers/customer_routes');
 const order_router = require('./routers/order_routes');
 const product_router = require('./routers/product_routes');
 
