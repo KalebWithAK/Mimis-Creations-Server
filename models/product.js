@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     desc: String,
     inStock: Number,
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
 });
 
 productSchema.statics.findByIdentifier = async function (identifier) {
