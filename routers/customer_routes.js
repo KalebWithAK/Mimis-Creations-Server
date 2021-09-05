@@ -41,21 +41,66 @@ router.post('/', (req, res) => {
 
 // update specified customer
 router.put('/:customer_id', (req, res) => {
-    res.send('Not implemented');
+    const customer = req.params.customer_id;
+    //res.send('Not implemented');
+
+    // save current customer info
+    let currentInfo;
+
+    Customer.find({ _id: customer })
+    .then(customer => currentInfo = customer)
+    .catch(err => res.status(400).json('Error: ' + err));
+
+    // change customer info depending on req.body
+    const name = req.body.name || currentInfo.name || null;
+    const email = req.body.email || currentInfo.email;
+
+    Customer.updateOne({ _id: customer}, { name, email })
+    .then(() => res.send(`Successfully updated customer ${ customer }`))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // add item to cart
-router.put('/:customer_id/addToCart/:product_id', (req, res) => {
-    res.send('Not implemented');
+router.put('/customer/:customer_id/addToCart/:product_id', (req, res) => {
+    const { customer, product } = req.params;
+    //res.send('Not implemented');
 
-    // TODO - push product_id to user's cart array
+    // save customer's current cart
+    let cart;
+
+    Customer.find({ _id: customer })
+    .then(customer => cart = customer.cart)
+    .catch(err => res.status(400).json('Error: ' + err));
+
+    // add new product to cart
+    cart.push(product);
+
+    // update customer's cart with product added
+    Customer.updateOne({ _id: customer}, { cart })
+    .then(() => res.send(`Successfully added product ${ product } to customer ${ customer }'s cart`))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // delete customer
 router.delete('/:customer_id', (req, res) => {
-    res.send('Not implemented');
+    const customer = req.params.customer_id;
 
-    // TODO - delete customer
+    //res.send('Not implemented');
+
+    Customer.deleteOne({ _id: customer })
+    .then(() => res.send(`Successfully deleted customer ${ customer }`))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// delete all customers
+router.delete('/admin', (req, res) => {
+    if (!req.body.admin_key || !req.body.confirmation) {
+        req.send('You are not authorized to access this route');
+    } else {
+        Product.deleteMany({})
+        .then(() => res.send('Successfully deleted all customers'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    }
 });
 
 module.exports = router;

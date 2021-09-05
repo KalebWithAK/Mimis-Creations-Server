@@ -20,12 +20,12 @@ router.post('/admin/create', (req, res) => {
     if (!req.body.admin_key) {
         res.send('You are not authorized to access this route')
     } else {
-        const category_name = req.body.category_name;
+        const name = req.body.name;
 
-        const newCategory = new Category({ category_name });
+        const newCategory = new Category({ name });
 
         newCategory.save()
-            .then(() => { res.send(`Successfully created new category with name: ${ category_name }`) })
+            .then(() => { res.send(`Successfully created new category with name: ${ name }`) })
             .catch(err => res.send(400).json('Error: ' + err));
     }
 });
